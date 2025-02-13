@@ -111,7 +111,7 @@ def select_webcam():
         target_color_2 = (195, 152, 217)  # Second target color
         tolerance_2 = 23  # Second tolerance
 
-        key_to_press = 'a'  # Keystroke to send
+        key_to_press = 'F8'  # Keystroke to send
 
         monitor_pixels_and_send_key(
             pixel_coords_1, target_color_1, tolerance_1,
