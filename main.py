@@ -39,7 +39,7 @@ def monitor_pixels_and_send_key(
         key_to_press (str): The keystroke to send when conditions are met.
         webcam_index (int): The webcam index to use.
     """
-    cap = cv2.VideoCapture(7)
+    cap = cv2.VideoCapture(webcam_index)
     if not cap.isOpened():
         print(f"Error: Could not open webcam with index {webcam_index}.")
         return
