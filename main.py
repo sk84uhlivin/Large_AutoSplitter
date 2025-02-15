@@ -1,5 +1,6 @@
 import cv2
 from cv2_enumerate_cameras import enumerate_cameras
+from datetime import datetime, timezone
 import keyboard
 import time
 import tkinter as tk
@@ -64,17 +65,19 @@ def monitor_pixels_and_send_key(
             color_1 = tuple(int(value) for value in frame[pixel_coords_1[1], pixel_coords_1[0]][::-1])
             color_2 = tuple(int(value) for value in frame[pixel_coords_2[1], pixel_coords_2[0]][::-1])
 
-            print(f"Detected color at {pixel_coords_1}: {color_1}")
-            print(f"Detected color at {pixel_coords_2}: {color_2}")
+            if debug:
+                print(f"Detected color at {pixel_coords_1}: {color_1}")
+                print(f"Detected color at {pixel_coords_2}: {color_2}")
 
             # Check conditions
             condition_1 = not is_color_within_tolerance(color_1, target_color_1, tolerance_1)
             condition_2 = is_color_within_tolerance(color_2, target_color_2, tolerance_2)
 
             if condition_1 and condition_2:
-                #keyboard.press_and_release(key_to_press)
-
+                keyboard.press_and_release(key_to_press)
+                utc_time = datetime.now(timezone.utc).strftime("%H:%M:%S")
                 print(
+                    f"{utc_time} - "
                     f"Conditions met! Target 1: {target_color_1}, Detected 1: {color_1} "
                     f"OUTSIDE tolerance {tolerance_1}. "
                     f"Target 2: {target_color_2}, Detected 2: {color_2} "
@@ -82,8 +85,7 @@ def monitor_pixels_and_send_key(
                 )
 
                 # Sleep for 30 seconds
-                time.sleep(12)
-                #input("Press to continue")
+                time.sleep(30)
 
                 # Flush the buffer by reading/disposing a few frames after sleep
                 for _ in range(5):
@@ -105,13 +107,12 @@ def select_webcam():
 
         # Define parameters for monitoring
         pixel_coords_1 = (1489, 127)  # First pixel coordinates
-        #pixel_coords_1 = (1409, 83)  # First pixel coordinates
-        target_color_1 = (68, 142, 40)  # First target color
-        tolerance_1 = 50  # First tolerance
+        target_color_1 = (68, 152, 40)  # First target color
+        tolerance_1 = 53  # First tolerance
 
         pixel_coords_2 = (979, 114)  # Second pixel coordinates
-        target_color_2 = (195, 152, 217)  # Second target color
-        tolerance_2 = 23  # Second tolerance
+        target_color_2 = (195, 152, 214)  # Second target color
+        tolerance_2 = 21  # Second tolerance
 
         key_to_press = 'F8'  # Keystroke to send
 
@@ -148,4 +149,5 @@ def select_webcam():
 
 
 # Start the program by allowing webcam selection
+debug = False
 select_webcam()
